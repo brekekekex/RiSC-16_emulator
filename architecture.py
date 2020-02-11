@@ -15,6 +15,9 @@ class Register:
             return
         else:
             self._contains = np.int16(value)
+            
+    def __str__(self):
+        return str(self._contains)
         
 class ProgramCounter(Register):
     def __init__(self):
@@ -41,7 +44,13 @@ class RegisterFile:
     
     def write(self, register, value):
         self._register_file[register].write(value)
-
+        
+    def __str__(self):
+        return_string = ''
+        for register in self._register_file:
+            return_string = return_string + str(register)
+        return return_string
+        
 class Memory:
     def __init__(self, size = 1000):
         self.size = size # in shortword addresses
@@ -55,7 +64,9 @@ class Memory:
         
 class ALU:
     def __init__(self):
-        pass
+        self.register
+    
+    def setOperands()
     
     
     

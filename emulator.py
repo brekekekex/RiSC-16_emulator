@@ -1,4 +1,5 @@
 from disassembler import *
+from virtualmachine import *
 
 class Emulator:
     def __init__(self, program_filepath, verbose_disassembler = True):
@@ -6,10 +7,10 @@ class Emulator:
         self.verbose_disassembler = verbose_disassembler
         
     def emulate(self):
-        myDisassembly = Disassembler(self.program_filepath)
-        disassembled_file = myDisassembly.Disassemble()
+        myDisassembler = Disassembler(self.program_filepath)
+        disassembled_file = myDisassembler.Disassemble()
         print(disassembled_file)
-        
+        myVirtualMachine = VirtualMachine()
         
     
 if __name__ == '__main__':
