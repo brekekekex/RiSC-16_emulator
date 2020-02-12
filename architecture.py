@@ -1,72 +1,71 @@
-import numpy as np
-
 class Register:
     def __init__(self, gnd = False):
-        # init zero
-        self._contains = np.int16(0)
-        if gnd:
-            self._gnd = gnd
-
+        self._gnd = gnd
+        self._signed = False 
+        self._content = (0).to_bytes(2, byteorder = 'big', signed = self._signed)
+        
     def read(self):
-        return self._contains
-
+        return int.from_bytes(self._content, byteorder = 'big', signed = self._signed)
+        
     def write(self, value):
-        if self._gnd:
-            return
-        else:
-            self._contains = np.int16(value)
-            
+        self._signed = (value < 0)
+        if not self._gnd:
+            self._content = (value).to_bytes(2, byteorder = 'big', signed = self._signed)
+        
     def __str__(self):
-        return str(self._contains)
-        
-class ProgramCounter(Register):
-    def __init__(self):
-        Register.__init__(self, gnd = False)
-    
-    def increment(self):
-        self.write(self.read + 1)
-        
+        return str(self._content)
+
 class RegisterFile:
     def __init__(self):
-        r0 = Register(True)
-        r1 = Register()
-        r2 = Register()
-        r3 = Register()
-        r4 = Register()
-        r5 = Register()
-        r6 = Register()
-        r7 = Register()
-        r8 = Register()
-        self._register_file = [r0, r1, r2, r3, r4, r5, r6, r7, r8]
-    
+        self._content = [Register(gnd = True)]
+        for i in range(7):
+            register = Register()
+            self._content.append(register)
+            
     def read(self, register):
-        return self._register_file[register].read()
-    
+        return self._content[register].read()
+        
     def write(self, register, value):
-        self._register_file[register].write(value)
+        self._content[register].write(value)
         
     def __str__(self):
         return_string = ''
-        for register in self._register_file:
-            return_string = return_string + str(register)
+        for register in self._content:
+            return_string = return_string + str(register) + '\n'
         return return_string
-        
+
 class Memory:
-    def __init__(self, size = 1000):
-        self.size = size # in shortword addresses
-        self._memory = [Register()]*self.size
-        
+    _DEFAULT_NUM_WORDS = 20
+    
+    def __init__(self):
+        self._content = []
+        for i in range(self._DEFAULT_NUM_WORDS):
+            address = Register()
+            self._content.append(address)
+            
     def read(self, address):
-        return self._memory[address].read()
+        return self._content[address].read()
     
     def write(self, address, value):
-        self._memory[address].write(value)
-        
+        self._content[address].write(value)
+    
+    def __str__(self):
+        return_string = ''
+        for address in self._content:
+            return_string = return_string + str(address) + '\n'
+        return return_string
+    
 class ALU:
     def __init__(self):
-        self.register
+        return
     
-    def setOperands()
+    def do_add(self, register_A, register_B, register_C):
+        register_A.write(register_B.read() + register_C.read())
+        return
     
-    
-    
+    def do_nand(self, register_A, register_B, register_C):
+        pass
+        
+        
+        
+        
