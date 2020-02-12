@@ -6,15 +6,21 @@ class Register:
         
     def read(self):
         return int.from_bytes(self._content, byteorder = 'big', signed = self._signed)
+    
+    def read_literal(self):
+        return int.from_bytes(self._content, byteorder = 'big', signed = False)
         
     def write(self, value):
         self._signed = (value < 0)
         if not self._gnd:
             self._content = (value).to_bytes(2, byteorder = 'big', signed = self._signed)
         
+    def write_literal(self, literal):
+        #self._content = (literal).to_bytes(2, byteorder = 'big', signed = False)
+        
     def __str__(self):
-        return str(self._content)
-
+        return '{0:#0{1}b}'.format(int.from_bytes(self._content, byteorder = 'big', signed = self._signed),16)
+        
 class RegisterFile:
     def __init__(self):
         self._content = [Register(gnd = True)]
@@ -33,7 +39,10 @@ class RegisterFile:
         for register in self._content:
             return_string = return_string + str(register) + '\n'
         return return_string
-
+    
+    def __getitem__(self, key):
+        return self._content[key]
+        
 class Memory:
     _DEFAULT_NUM_WORDS = 20
     
@@ -57,15 +66,20 @@ class Memory:
     
 class ALU:
     def __init__(self):
-        return
+        self._special = Register()
     
     def do_add(self, register_A, register_B, register_C):
         register_A.write(register_B.read() + register_C.read())
-        return
+        
+    def do_addi(self, register_A, register_B, immed):
+        self._special.write(immed)
+        register_A.write(register_B.read() + self._special.read())
     
     def do_nand(self, register_A, register_B, register_C):
-        pass
+        print(~(register_B.read() & register_C.read()))
+        register_A.write_literal(~(register_B.read_literal() & register_C.read_literal())) 
         
+    
         
         
         
