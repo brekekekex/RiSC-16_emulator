@@ -7,9 +7,6 @@ class Register:
     def read(self):
         return int.from_bytes(self._content, byteorder = 'big', signed = self._signed)
     
-    #def read_literal(self):
-    #    return self._content
-        
     def write(self, value):
         self._signed = (value < 0)
         if not self._gnd:
@@ -83,9 +80,9 @@ class Decoder:
         pass
     
     def decode(self, instruction):
+        print(bin(instruction))
         
-        
-        
+        return 0, 0, 0, 0, 0
         
         pass
         

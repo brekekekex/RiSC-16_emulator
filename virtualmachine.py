@@ -17,7 +17,7 @@ class VirtualMachine:
     
     def _execute_at_PC(self):
         instruction = self._memory.read(self._PC.read())
-        print(instruction)
+        instr, regA, regB, regC, immed = self._decoder.decode(instruction)
         
         
         
