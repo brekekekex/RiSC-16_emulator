@@ -9,9 +9,12 @@ class Emulator:
     def emulate(self):
         myDisassembler = Disassembler(self.program_filepath)
         disassembled_file = myDisassembler.Disassemble()
-        print(disassembled_file)
+        #print(disassembled_file)
         myVirtualMachine = VirtualMachine()
-        
+        myVirtualMachine.load(self.program_filepath)
+        myVirtualMachine.dump_core()
+        myVirtualMachine._execute_at_PC()
+    
     
 if __name__ == '__main__':
     import argparse

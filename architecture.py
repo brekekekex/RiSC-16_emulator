@@ -7,19 +7,19 @@ class Register:
     def read(self):
         return int.from_bytes(self._content, byteorder = 'big', signed = self._signed)
     
-    def read_literal(self):
-        return int.from_bytes(self._content, byteorder = 'big', signed = False)
+    #def read_literal(self):
+    #    return self._content
         
     def write(self, value):
         self._signed = (value < 0)
         if not self._gnd:
             self._content = (value).to_bytes(2, byteorder = 'big', signed = self._signed)
-        
-    def write_literal(self, literal):
-        #self._content = (literal).to_bytes(2, byteorder = 'big', signed = False)
-        
+            
+    def increment(self):
+        self.write(self.read() + 1)
+                 
     def __str__(self):
-        return '{0:#0{1}b}'.format(int.from_bytes(self._content, byteorder = 'big', signed = self._signed),16)
+        return '[0d]\t' + str(self.read())      
         
 class RegisterFile:
     def __init__(self):
@@ -76,10 +76,17 @@ class ALU:
         register_A.write(register_B.read() + self._special.read())
     
     def do_nand(self, register_A, register_B, register_C):
-        print(~(register_B.read() & register_C.read()))
-        register_A.write_literal(~(register_B.read_literal() & register_C.read_literal())) 
-        
+        register_A.write(~(register_B.read() & register_C.read()))
     
+class Decoder:
+    def __init__(self):
+        pass
+    
+    def decode(self, instruction):
         
+        
+        
+        
+        pass
         
         
